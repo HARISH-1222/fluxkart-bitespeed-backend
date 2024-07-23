@@ -3,6 +3,7 @@ import * as contactModel from '../model/model.contact'
 import { ICandidate,IOutput } from '../interfaces/interface.candidate';
 
 export const getContactList = async (req:Request,res:Response) => {
+  try {
     const requestData = req.body;
 
     let candidateDetails:ICandidate[];
@@ -55,9 +56,19 @@ export const getContactList = async (req:Request,res:Response) => {
             "contact":{outputData}
         }
     );   
+  } catch (error) {
+      res.status(500).json(
+        {
+            "status":"Failed",
+            "Error":error
+        }
+      );   
+  }
 }
 
+//For Testing
 export const insertController = async(req:Request,res:Response) => {
+  try {
     const requestData = req.body;
 
     // let isNewCustomer
@@ -74,16 +85,31 @@ export const insertController = async(req:Request,res:Response) => {
             "contact":{candidateDetails}
         }
     );   
+  } catch (error) {
+    res.status(500).json(
+      {
+          "status":"Failed",
+          "Error":error
+      }
+    ); 
+  }
 }
 
 export const deleteController = async(req:Request,res:Response) => {
-
-    
-   await contactModel.deleteAllCustomer();
+  try {
+    await contactModel.deleteAllCustomer();
     
     res.status(200).json(
         {
             "status":"success deleted",
         }
     );   
+  } catch (error) {
+    res.status(500).json(
+      {
+          "status":"Failed",
+          "Error":error
+      }
+    ); 
+  }
 }
