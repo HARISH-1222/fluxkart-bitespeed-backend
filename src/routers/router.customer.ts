@@ -6,4 +6,8 @@ import * as contactController from '../controllers/controller.contact'
 
 Router.route("/identify").post(contactController.getContactList);
 
+Router.route("/insert").post(contactController.insertController);
+
+Router.route("/delete").delete(contactController.deleteController);
+
 export default Router;

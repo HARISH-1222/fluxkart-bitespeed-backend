@@ -3,7 +3,7 @@ import { ICandidate } from '../interfaces/interface.candidate';
 
 const prisma = new PrismaClient();
 
-const getCustomerData = async (email:string,phoneNumber:string):Promise<ICandidate[]> => {
+export const getCustomerData = async (email:string,phoneNumber:string):Promise<ICandidate[]> => {
     try {
         const customerData:ICandidate[] = await prisma.contact.findMany({
             where:{
@@ -78,6 +78,15 @@ export const createNewCustomer = async(email:string,phoneNumber:string):Promise<
         return Array.of(customer);
     } catch (error) {
         throw error
+    }
+}
+
+export const deleteAllCustomer = async() => {
+    try {
+        let deleteC = prisma.contact.deleteMany();
+        return deleteC;
+    } catch (error) {
+        throw error;
     }
 }
 
