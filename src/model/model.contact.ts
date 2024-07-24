@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 export const getCustomerData = async (email:string | null,phoneNumber:string | null):Promise<ICandidate[]> => {
     try {
-        const customerData:ICandidate[] = await prisma.contact.findMany({
+        let customerData:ICandidate[] = await prisma.contact.findMany({
             where:{
                 OR:[
                     {
@@ -20,6 +20,40 @@ export const getCustomerData = async (email:string | null,phoneNumber:string | n
                 id:'asc'
             }
         });
+        if(customerData.length > 0)
+        {
+            let additionalDataById:ICandidate[];
+            if(customerData[0].linkPrecedence == "secondary"){
+                let primaryId:number|null = customerData[0].linkedId;
+                additionalDataById = await prisma.contact.findMany({
+                    where:{
+                        OR:[
+                            {
+                                id:primaryId || 0 //ts not know this condition that i check if secondary so it tell linkedId id may come null
+                            },
+                            {
+                                linkedId:primaryId
+                            }
+                        ]
+                    },
+                    orderBy:{
+                        id:'asc'
+                    }
+                })
+            }else{
+                additionalDataById= await prisma.contact.findMany({
+                    where:{
+                        linkedId:customerData[0].id
+                    },
+                    orderBy:{
+                        id:'asc'
+                    }
+                })
+            }
+
+            customerData.push(...additionalDataById);
+        }  
+
         return customerData;
     } catch (error) {
         throw error;

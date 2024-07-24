@@ -55,6 +55,9 @@ export const getContactList = async (req:Request,res:Response) => {
 
     })
     
+    outputData.emails = Array.from(new Set(outputData.emails));
+    outputData.phoneNumbers = Array.from(new Set(outputData.phoneNumbers));
+
     res.status(200).json(
         {
             "status":"success",
