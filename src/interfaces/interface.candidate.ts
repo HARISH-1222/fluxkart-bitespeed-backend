@@ -1,6 +1,11 @@
 import { $Enums } from '@prisma/client';
 
 
+export interface IRequestBody{
+    email:string | null,
+    phoneNumber:string | null
+} 
+
 export interface IOutput{
     primaryContatctId: number,
     emails: string[],

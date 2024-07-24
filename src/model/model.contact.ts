@@ -3,7 +3,7 @@ import { ICandidate } from '../interfaces/interface.candidate';
 
 const prisma = new PrismaClient();
 
-export const getCustomerData = async (email:string,phoneNumber:string):Promise<ICandidate[]> => {
+export const getCustomerData = async (email:string | null,phoneNumber:string | null):Promise<ICandidate[]> => {
     try {
         const customerData:ICandidate[] = await prisma.contact.findMany({
             where:{
@@ -26,17 +26,17 @@ export const getCustomerData = async (email:string,phoneNumber:string):Promise<I
     }
 }
 
-export const isNewCustomer = async(email:string,phoneNumber:string):Promise<boolean> =>{
+export const isNewCustomer = async(email:string | null,phoneNumber:string | null):Promise<boolean> =>{
     try {
         const customerData:Array<Prisma.ContactCreateInput> = await getCustomerData(email,phoneNumber);
-        
+
         return customerData.length > 0 ? false : true;
     } catch (error) {
         throw error;
     }
 }
 
-export const checkIsPhoneNumOrEmailMatch = async (email:string,phoneNumber:string):Promise<ICandidate[]> => {
+export const checkIsPhoneNumOrEmailMatch = async (email:string | null,phoneNumber:string | null):Promise<ICandidate[]> => {
     try {
         const customerData:ICandidate[] = await getCustomerData(email,phoneNumber);
 
@@ -65,7 +65,7 @@ export const checkIsPhoneNumOrEmailMatch = async (email:string,phoneNumber:strin
     }
 }
 
-export const createNewCustomer = async(email:string,phoneNumber:string):Promise<ICandidate[]> => {
+export const createNewCustomer = async(email:string | null,phoneNumber:string | null):Promise<ICandidate[]> => {
     try {
         let contactData: Prisma.ContactCreateInput;
 
@@ -90,7 +90,7 @@ export const deleteAllCustomer = async() => {
     }
 }
 
-export const isEmailOfCustomerExist = async (email: string): Promise<boolean> => {
+export const isEmailOfCustomerExist = async (email: string | null): Promise<boolean> => {
     try {
         const customerData:ICandidate[] = await prisma.contact.findMany({
             where:{
@@ -106,7 +106,7 @@ export const isEmailOfCustomerExist = async (email: string): Promise<boolean> =>
     }
 }
 
-export const isPhoneNumberOfCustomerExist = async (phoneNumber: string): Promise<boolean> => {
+export const isPhoneNumberOfCustomerExist = async (phoneNumber: string | null): Promise<boolean> => {
     try {
         const customerData:ICandidate[] = await prisma.contact.findMany({
             where:{
